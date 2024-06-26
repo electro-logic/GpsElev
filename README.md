@@ -20,7 +20,7 @@ The maximum storable altitude is 60*60*60/10=21600 meters, that's enough for mos
 
 # How to use
 
-Run GpsElev.exe from your picture folder to automatically process all .ARW files of the folder. Exiftool.exe needs to be in the same folder.
+Run GpsElev.exe from your picture folder to automatically process all .jpg and .arw files of the folder. Exiftool.exe needs to be in the same folder.
 
 # Requirements
 

@@ -1,9 +1,12 @@
 ﻿// Extract GPS Altitude from the GPS timestamp and write it as metadata
 // exiftool (https://exiftool.org/) executable is required in the same folder of this app
 using System.Diagnostics;
-var files = Directory.EnumerateFiles(Environment.CurrentDirectory, "*.arw");
+var files = Directory.EnumerateFiles(Environment.CurrentDirectory, "*");
 foreach (var file in files)
 {
+    var ext = Path.GetExtension(file).ToLower();
+    if ((ext != ".arw") && (ext != ".jpg"))
+        continue;
     // Extract timestamp (example: "02:04:50")
     string timestamp = ExifTool($"{file} -gpstimestamp -T");
     // Calculate GPS Altitude  Base 60 encoded from Time
@@ -16,8 +19,9 @@ foreach (var file in files)
     double altitude = (double.Parse(tokens[0]) * 3600 + double.Parse(tokens[1]) * 60 + double.Parse(tokens[2])) / 10.0;
     // Write exif Altitude (meters), AltitudeRef (above sea level), Remove Timestamp
     ExifTool($"-GPSAltitude={altitude} -GPSAltitudeRef=0 -GPSMeasureMode=3 -GPSTimeStamp= {file}");
-    Console.WriteLine($"EXIF Metadata updated for {file}");
+    Console.WriteLine($"EXIF Metadata updated for {file}");    
 }
+Console.ReadKey();
 string ExifTool(string arg)
 {
     var psi = new ProcessStartInfo("exiftool.exe", arg)
